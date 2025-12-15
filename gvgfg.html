@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Економічна безпека Великої Британії</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        nav {
+            background: #111;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid #333;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        nav a:hover, nav a.active {
+            background: #222;
+            border-color: #fff;
+        }
+
+        .page {
+            display: none;
+            min-height: calc(100vh - 80px);
+            padding: 3rem 2rem;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            border-bottom: 3px solid #fff;
+            padding-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin: 2rem 0 1rem;
+            border-left: 5px solid #fff;
+            padding-left: 1rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+        }
+
+        .info-card {
+            background: #111;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border: 1px solid #333;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .info-item {
+            background: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #fff;
+        }
+
+        .info-item strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .resume-section {
+            margin: 2rem 0;
+            background: #111;
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+
+        .experience-item, .education-item {
+            background: #1a1a1a;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid #fff;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .skill-item {
+            background: #1a1a1a;
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .chart-container {
+            background: #111;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border: 1px solid #333;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin: 1rem 0;
+        }
+
+        .threats-recommendations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .threat-card, .recommendation-card {
+            background: #111;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #333;
+            transition: transform 0.3s;
+        }
+
+        .threat-card {
+            border-left: 5px solid #ff4444;
+        }
+
+        .recommendation-card {
+            border-left: 5px solid #44ff44;
+        }
+
+        .threat-card:hover, .recommendation-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .threat-card .number {
+            color: #ff4444;
+        }
+
+        .recommendation-card .number {
+            color: #44ff44;
+        }
+
+        ul {
+            margin-left: 2rem;
+            margin-top: 0.5rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+            }
+
+            nav a {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .chart-wrapper {
+                height: 300px;
+            }
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#" class="nav-link active" data-page="page1">Про мене</a></li>
+            <li><a href="#" class="nav-link" data-page="page2">Резюме</a></li>
+            <li><a href="#" class="nav-link" data-page="page3">Аналітичний звіт</a></li>
+        </ul>
+    </nav>
+
+    <!-- Page 1: About -->
+    <div id="page1" class="page active">
+        <div class="container">
+            <h1>Інформація про студента</h1>
+            <div class="info-card">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Ім'я та Прізвище:</strong>
+                        Мосійчук Дар'я
+                    </div>
+                    <div class="info-item">
+                        <strong>Факультет:</strong>
+                        Факультет міжнародної торгівлі та права
+                    </div>
+                    <div class="info-item">
+                        <strong>Група:</strong>
+                        1-7
+                    </div>
+                    <div class="info-item">
+                        <strong>Дисципліна:</strong>
+                        Інформаційні технології в забезпеченні економічної безпеки держави
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 2: Resume -->
+    <div id="page2" class="page">
+        <div class="container">
+            <h1>Резюме - Dasha Mosiychuk</h1>
+            
+            <div class="info-card">
+                <h2>Контактна інформація</h2>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <strong>Телефон:</strong> (+380) 990903543
+                    </div>
+                    <div class="contact-item">
+                        <strong>Дата народження:</strong> 27/10/2008
+                    </div>
+                    <div class="contact-item">
+                        <strong>Адреса:</strong> Гуртожиток №2-6, вул. Милютенка, Київ, Україна
+                    </div>
+                </div>
+            </div>
+
+            <div class="resume-section">
+                <h2>Досвід роботи</h2>
+                <div class="experience-item">
+                    <h3>Спортивний тренер</h3>
+                    <p><em>19/01/2024 – Теперішній час</em></p>
+                    <ul>
+                        <li>Робота в великій команді</li>
+                        <li>Взаємодія з постачальниками</li>
+                        <li>Тренування молодіжної команди з гирьового спорту (6 годин/тиждень) протягом кількох років</li>
+                        <li>Створення відео для приватних компаній для їх просування</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="resume-section">
+                <h2>Освіта</h2>
+                <div class="education-item">
+                    <h3>Середня освіта</h3>
+                    <p>Радомишльський опорний ліцей №2</p>
+                </div>
+            </div>
+
+            <div class="resume-section">
+                <h2>Мовні навички</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Рідна мова:</strong> Українська
+                    </div>
+                    <div class="info-item">
+                        <strong>Англійська:</strong>
+                        <ul>
+                            <li>Читання: B1</li>
+                            <li>Письмо: A2</li>
+                            <li>Розмовна: B1</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resume-section">
+                <h2>Навички</h2>
+                <div class="skills-grid">
+                    <div class="skill-item">Створення артистичних виступів</div>
+                    <div class="skill-item">Промоція спорту в школах</div>
+                    <div class="skill-item">Основи відеомонтажу</div>
+                    <div class="skill-item">Планування та організація</div>
+                    <div class="skill-item">Робота в команді</div>
+                    <div class="skill-item">Тренування молоді</div>
+                    <div class="skill-item">Графічний дизайн (Canva)</div>
+                    <div class="skill-item">Соціальні медіа</div>
+                </div>
+            </div>
+
+            <div class="resume-section">
+                <h2>Творчі роботи</h2>
+                <div class="experience-item">
+                    <ul>
+                        <li><strong>Благодійний концерт:</strong> Організувала благодійний концерт для допомоги ЗСУ, зібрала талановитих дітей та разом створили концерт, на якому зібрали 20 000 грн</li>
+                        <li><strong>Виступи:</strong> Пародія на Вєрку Сердючку з класом - визнана найкращим виступом, показана для всього міста</li>
+                        <li><strong>Благодійні ярмарки:</strong> Організація кількох благодійних ярмарків</li>
+                        <li><strong>Відеопродукція:</strong> Створення та зйомка креативних ідей для відео</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="resume-section">
+                <h2>Волонтерство</h2>
+                <div class="experience-item">
+                    <p>Активно займаюся волонтерською діяльністю: організовую благодійні заходи, роблю пожертви та допомагаю людям за потреби.</p>
+                </div>
+            </div>
+
+            <div class="resume-section">
+                <h2>Хобі та інтереси</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Спорт:</strong>
+                        <ul>
+                            <li>Волейбол та баскетбол</li>
+                            <li>Майстер спорту з гирьового спорту</li>
+                            <li>Чемпіонка України та Європи</li>
+                        </ul>
+                    </div>
+                    <div class="info-item">
+                        <strong>Читання</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 3: Analytical Report -->
+    <div id="page3" class="page">
+        <div class="container">
+            <h1>Аналітичний звіт: Велика Британія (2014-2023)</h1>
+            
+            <div class="chart-container">
+                <h2>Державний борг до ВВП (%)</h2>
+                <div class="chart-wrapper">
+                    <canvas id="debtChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h2>Сальдо поточного рахунку платіжного балансу (% ВВП)</h2>
+                <div class="chart-wrapper">
+                    <canvas id="balanceChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h2>Наукові роботи у ВВП (%)</h2>
+                <div class="chart-wrapper">
+                    <canvas id="scienceChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h2>Відновлювальні джерела енергії (%)</h2>
+                <div class="chart-wrapper">
+                    <canvas id="energyChart"></canvas>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 3rem; text-align: center;">5 Основних загроз економічній безпеці Великої Британії</h2>
+            <div class="threats-recommendations">
+                <div class="threat-card">
+                    <div class="number">01</div>
+                    <h3>Критичний рівень державного боргу</h3>
+                    <p>Зростання державного боргу з 58.46% (2014) до 98.71% (2020) та стабілізація на рівні 80-83% свідчить про високе боргове навантаження. Це обмежує фіскальні можливості держави реагувати на кризи та підвищує вразливість до зовнішніх шоків.</p>
+                </div>
+
+                <div class="threat-card">
+                    <div class="number">02</div>
+                    <h3>Хронічний дефіцит поточного рахунку</h3>
+                    <p>Негативне сальдо поточного рахунку протягом усього періоду (середнє -2.48%) вказує на залежність від іноземного капіталу та структурні проблеми в торговельному балансі, що послаблює економічну незалежність країни.</p>
+                </div>
+
+                <div class="threat-card">
+                    <div class="number">03</div>
+                    <h3>Недостатні інвестиції в науку</h3>
+                    <p>Частка наукових робіт у ВВП стагнує на рівні 1.2% без значного зростання. Це загрожує втратою конкурентоспроможності в глобальній економіці знань та технологічному відставанню від лідерів інновацій.</p>
+                </div>
+
+                <div class="threat-card">
+                    <div class="number">04</div>
+                    <h3>Повільна енергетична трансформація</h3>
+                    <p>Незважаючи на зростання відновлювальної енергії до 50% (2020), темпи збільшення частки залишаються недостатніми для досягнення амбітних кліматичних цілей та енергетичної незалежності в умовах геополітичної нестабільності.</p>
+                </div>
+
+                <div class="threat-card">
+                    <div class="number">05</div>
+                    <h3>Вразливість до економічних шоків</h3>
+                    <p>Комбінація високого боргу, дефіциту поточного рахунку та обмежених інвестицій у майбутнє створює системну вразливість до глобальних економічних криз, інфляційних хвиль та геополітичних конфліктів.</p>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 3rem; text-align: center;">5 Рекомендацій для покращення економічної безпеки</h2>
+            <div class="threats-recommendations">
+                <div class="recommendation-card">
+                    <div class="number">01</div>
+                    <h3>Фіскальна консолідація</h3>
+                    <p>Розробити довгострокову стратегію зниження державного боргу до рівня нижче 60% ВВП через оптимізацію видатків, боротьбу з ухиленням від податків та стимулювання економічного зростання для підвищення податкових надходжень.</p>
+                </div>
+
+                <div class="recommendation-card">
+                    <div class="number">02</div>
+                    <h3>Покращення торговельного балансу</h3>
+                    <p>Стимулювати експорт високотехнологічних товарів та послуг, розвивати внутрішнє виробництво в стратегічних секторах, укладати нові торговельні угоди після Brexit для зменшення дефіциту поточного рахунку.</p>
+                </div>
+
+                <div class="recommendation-card">
+                    <div class="number">03</div>
+                    <h3>Збільшення інвестицій у R&D</h3>
+                    <p>Підвищити частку наукових досліджень у ВВП до рівня 2-2.5% через державно-приватне партнерство, податкові стимули для інноваційних компаній та залучення венчурного капіталу в технологічні стартапи.</p>
+                </div>
+
+                <div class="recommendation-card">
+                    <div class="number">04</div>
+                    <h3>Прискорення зеленої трансформації</h3>
+                    <p>Збільшити інвестиції в відновлювальну енергетику, розвивати інфраструктуру для електромобілів, надавати податкові пільги зеленим технологіям для досягнення цілей Net Zero та зменшення залежності від імпорту енергоносіїв.</p>
+                </div>
+
+                <div class="recommendation-card">
+                    <div class="number">05</div>
+                    <h3>Диверсифікація економіки</h3>
+                    <p>Розвивати нові сектори економіки (кібербезпека, штучний інтелект, біотехнології), зменшувати залежність від фінансового сектору, інвестувати в освіту та перекваліфікацію робочої сили для підвищення економічної стійкості.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation - fixed
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links and pages
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    pages.forEach(p => p.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Show corresponding page
+                    const pageId = this.getAttribute('data-page');
+                    const targetPage = document.getElementById(pageId);
+                    if (targetPage) {
+                        targetPage.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Chart configuration
+        const chartConfig = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#fff'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    ticks: { color: '#fff' },
+                    grid: { color: '#333' }
+                },
+                x: {
+                    ticks: { color: '#fff' },
+                    grid: { color: '#333' }
+                }
+            }
+        };
+
+        // Debt Chart
+        new Chart(document.getElementById('debtChart'), {
+            type: 'line',
+            data: {
+                labels: ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'],
+                datasets: [{
+                    label: 'Державний борг до ВВП (%)',
+                    data: [58.46, 67.54, 73.42, 83.67, 86.61, 92.57, 98.71, 85.01, 79.10, 83.03],
+                    borderColor: '#ff4444',
+                    backgroundColor: 'rgba(255, 68, 68, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: chartConfig
+        });
+
+        // Balance Chart
+        new Chart(document.getElementById('balanceChart'), {
+            type: 'bar',
+            data: {
+                labels: ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'],
+                datasets: [{
+                    label: 'Сальдо поточного рахунку (% ВВП)',
+                    data: [-4.50, -3.52, -1.70, -1.22, -2.81, -3.47, -1.69, -2.42, -2.16, -1.27],
+                    backgroundColor: '#4488ff'
+                }]
+            },
+            options: chartConfig
+        });
+
+        // Science Chart
+        new Chart(document.getElementById('scienceChart'), {
+            type: 'line',
+            data: {
+                labels: ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'],
+                datasets: [{
+                    label: 'Наукові роботи у ВВП (%)',
+                    data: [1.14, 1.13, 1.20, 1.27, 1.37, 1.29, 1.12, 1.17, 1.21, 1.15],
+                    borderColor: '#ffaa00',
+                    backgroundColor: 'rgba(255, 170, 0, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: chartConfig
+        });
+
+        // Energy Chart
+        new Chart(document.getElementById('energyChart'), {
+            type: 'line',
+            data: {
+                labels: ['2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020'],
+                datasets: [{
+                    label: 'Відновлювальні джерела (%)',
+                    data: [45.2, 43.5, 42.3, 41.7, 43.7, 45.4, 45.3, 46.9, 47.5, 50.0],
+                    borderColor: '#44ff44',
+                    backgroundColor: 'rgba(68, 255, 68, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: chartConfig
+        });
+    </script>
+</body>
+</html>
